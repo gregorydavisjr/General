@@ -1,0 +1,440 @@
+package java_final_exam;
+import javax.swing.JOptionPane;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.StringTokenizer;
+
+public class java_project 
+{
+	public static void main(String[] args)
+	  {
+		int Selection;
+		int StudentID[]=new int[100];
+		String StudentFname[]=new String[100];
+		String StudentLname[]=new String[100];
+		int StudentAge[]=new int[100];
+		String StudentGender[]=new String[100];
+		int StudentYear[]=new int[100];
+		
+		String CourseNumber[]=new String [100];
+		String CourseName[]=new String [100];
+		String ProfName[]=new String [100];
+		
+		int RegStudentNumber []=new int [100];
+		String RegCourseNumber[]=new String [100];
+		
+		int scount=-1;
+		int ccount=-1;
+		int rcount=-1;
+			
+		scount=Begin_read_student(StudentID,StudentFname,StudentLname,StudentAge,StudentGender,StudentYear,scount);
+		ccount=Begin_read_course(CourseNumber,CourseName,ProfName,ccount);
+		rcount=Begin_read_register(RegStudentNumber,RegCourseNumber,rcount);
+		
+		Selection=Menu();
+		while(Selection != 5)
+		{
+			if(Selection==1)
+				scount=Modify_student_menu(StudentID,StudentFname,StudentLname,StudentAge,StudentGender,StudentYear,scount);
+			else
+				if(Selection==2)
+					scount=Modify_course(CourseNumber,CourseName,ProfName,ccount);
+				else
+					if(Selection==3)
+						scount=Modify_registration(RegStudentNumber,RegCourseNumber,rcount);
+					else
+				    	if(Selection==4)
+							scount=Report(StudentID,StudentFname,StudentLname,StudentAge,StudentGender,StudentYear,CourseNumber,CourseName,ProfName,RegStudentNumber,RegCourseNumber,scount,ccount,rcount);
+			Selection=Menu();
+		}
+		Exit_RMU();
+		System.exit(0);
+	}
+	public static Integer Menu()
+	{
+		int Selection0;
+		String Selection0_String;
+		Selection0_String=JOptionPane.showInputDialog(null,"Robert Morris University"+"\n"+"\n"+"1. Add/Modify Student Information"+
+				"\n"+"2. Add/Modify Course Information"+
+				"\n"+"3. Add/Modify Registration"+"\n"
+				+"4. Report Section"+"\n"+
+				"5. Exit the System"+"\n"+"\n"+"Please Make your Selection", "Robert Morris University", JOptionPane.QUESTION_MESSAGE);
+		Selection0=Integer.parseInt(Selection0_String);
+		return Selection0;
+	}
+	public static int Modify_student_menu(int StudentID[],String StudentFname[],String StudentLname[],
+			int StudentAge[],String StudentGender[],int StudentYear[],int scount)
+	{
+		System.out.println("Executing Modify Student");
+		int Selection_Student;
+		String Selection_String;
+		Selection_String=JOptionPane.showInputDialog(null,"Robert Morris University"+"\n"+"\n"+"1. Add Student"+
+				"\n"+"2. Delete Student"+
+				"\n"+"3. Modify Student"+"\n"+
+				"\n"+"\n"+"Please Make your Selection", "Robert Morris University", JOptionPane.QUESTION_MESSAGE);
+		Selection_Student=Integer.parseInt(Selection_String);
+		if(Selection_Student==1)
+			scount=Add_Student(StudentID,StudentFname,StudentLname,StudentAge,StudentGender,StudentYear,scount);
+		else
+			if(Selection_Student==2)
+				scount=Delete_Student(StudentID,StudentFname,StudentLname,StudentAge,StudentGender,StudentYear,scount);
+			else
+				if(Selection_Student==3)
+					Modify_Student(StudentID,StudentFname,StudentLname,StudentAge,StudentGender,StudentYear,scount);
+		return scount;
+	}	
+	public static int Add_Student(int StudentID[],String StudentFname[],String StudentLname[],
+			int StudentAge[],String StudentGender[],int StudentYear[],int scount) 
+	{
+		String value;
+		scount=scount+1;
+		
+		value =JOptionPane.showInputDialog(null,
+			        "Enter the student's ID Number","Robert Morris University",JOptionPane.QUESTION_MESSAGE);
+	     StudentID[scount]=Integer.parseInt(value);
+	    StudentFname[scount] =JOptionPane.showInputDialog(null,
+			        "Enter the student's First Name","Robert Morris University",JOptionPane.QUESTION_MESSAGE);
+	    StudentLname[scount] =JOptionPane.showInputDialog(null,
+		        "Enter the student's Last Name","Robert Morris University",JOptionPane.QUESTION_MESSAGE);
+	    value =JOptionPane.showInputDialog(null,
+		        "Enter the student's Age","Robert Morris University",JOptionPane.QUESTION_MESSAGE);
+	     StudentAge[scount]=Integer.parseInt(value);
+	    StudentGender[scount] =JOptionPane.showInputDialog(null,
+		        "Enter the student's Gender","Robert Morris University",JOptionPane.QUESTION_MESSAGE);
+	    value =JOptionPane.showInputDialog(null,
+		        "Enter the student's Year","Robert Morris University",JOptionPane.QUESTION_MESSAGE);
+	     StudentYear[scount]=Integer.parseInt(value);
+	     return scount;
+	}	
+	public static int Delete_Student(int StudentID[],String StudentFname[],String StudentLname[],
+			int StudentAge[],String StudentGender[],int StudentYear[],int scount)
+	{
+		int search_student,position=0,i;
+		String value;
+		value =JOptionPane.showInputDialog(null,"Enter Student ID","Robert Morris University",JOptionPane.QUESTION_MESSAGE);
+		search_student=Integer.parseInt(value);
+		for(i=0;i<=scount;++i)
+		{
+		 if(StudentID[i]==search_student) position =i;
+		}
+		for(i=position;i<=scount-1;++i)
+		{
+		 StudentID[i]=StudentID[i+1];
+		 StudentFname[i]=StudentFname[i+1];
+		 StudentLname[i]=StudentLname[i+1];
+		 StudentAge[i]=StudentAge[i+1];
+		 StudentGender[i]=StudentGender[i+1];
+		 StudentYear[i]=StudentYear[i+1];
+		}
+		scount=scount-1;
+		return scount;
+	}
+	public static void Modify_Student(int StudentID[],String StudentFname[],String StudentLname[],
+			int StudentAge[],String StudentGender[],int StudentYear[],int scount)
+	{
+		String value;
+		int search_student,position=0,i,selection;
+		value =JOptionPane.showInputDialog(null,"Enter Student ID","Robert Morris University",JOptionPane.QUESTION_MESSAGE);
+		search_student =Integer.parseInt(value);
+		for(i=0;i<=scount;++i)
+		{
+		if(StudentID[i]==search_student) position = i;
+		}
+		value =JOptionPane.showInputDialog(null,"Robert Morris University"+"\n"+"\n"+"1. Change the First Name"+
+				"\n"+"2. Change the Last Name"+
+				"\n"+"3. Change the Age"+
+				"\n"+"4. Change the Gender"+
+				"\n"+"5. Change the Year"+"\n"+"\n"+"Please Make your Selection","Robert Morris University");
+		selection =Integer.parseInt(value);
+		if(selection==1)
+			{
+			StudentFname[position] =JOptionPane.showInputDialog(null,"Enter new First Name","Robert Morris University",JOptionPane.QUESTION_MESSAGE);
+			}
+		else
+			if(selection==2)
+				{
+				StudentLname[position] =JOptionPane.showInputDialog(null,"Enter new Last Name","Robert Morris University",JOptionPane.QUESTION_MESSAGE);
+				}
+			else
+				if(selection==3)
+				{
+				value =JOptionPane.showInputDialog(null,"Enter new Age","Robert Morris University",JOptionPane.QUESTION_MESSAGE);
+				StudentAge[position] =Integer.parseInt(value);
+				}
+				else
+					if(selection==4)
+					{
+					StudentGender[position] =JOptionPane.showInputDialog(null,"Enter new Gender","Robert Morris University",JOptionPane.QUESTION_MESSAGE);
+					}
+					else
+						if(selection==5)
+						{
+						value =JOptionPane.showInputDialog(null,"Enter new Year","Robert Morris University",JOptionPane.QUESTION_MESSAGE);
+						StudentYear[position] =Integer.parseInt(value);
+						}
+	}
+	public static int Modify_course(String CourseNumber[], String CourseName[], String ProfName[],int ccount)
+	{
+		System.out.println("Executing Modify Course");
+		ccount=ccount+1;
+		
+		CourseNumber[ccount] =JOptionPane.showInputDialog(null,
+			        "Enter the Course Number","Robert Morris University",JOptionPane.QUESTION_MESSAGE);
+		CourseName[ccount] =JOptionPane.showInputDialog(null,
+			        "Enter the Course Name","Robert Morris University",JOptionPane.QUESTION_MESSAGE);
+		ProfName[ccount] =JOptionPane.showInputDialog(null,
+			        "Enter the Professor's Name","Robert Morris University",JOptionPane.QUESTION_MESSAGE);
+		return ccount;
+	}
+	
+	public static int Modify_registration(int RegStudentNumber[],String RegCourseNumber[],int rcount)
+	{
+		System.out.println("Executing Modify registration");
+		String value;
+		rcount=rcount+1;
+		
+		value =JOptionPane.showInputDialog(null,
+			        "Enter the Student Number","Robert Morris University",JOptionPane.QUESTION_MESSAGE);
+		RegStudentNumber[rcount]=Integer.parseInt(value);
+		RegCourseNumber[rcount] =JOptionPane.showInputDialog(null,
+			        "Enter the student's ID Number","Robert Morris University",JOptionPane.QUESTION_MESSAGE);
+		return rcount;
+	}
+	
+ 	public static int Report(int StudentID[],String StudentFname[],String StudentLname[],
+			int StudentAge[],String StudentGender[],int StudentYear[],String CourseNumber[],
+			String CourseName[],String ProfName[],int RegStudentNumber[],String RegCourseNumber[],int scount, int ccount, int rcount)
+	{
+	    int Selection_Report = 0;
+		Selection_Report=Report_Menu();
+		while(Selection_Report != 11)
+		{
+			int i;
+			if(Selection_Report==1)
+			{
+				System.out.println("\n"+"All Students");
+				System.out.println("============");
+				for (i=0;i<=scount;++i)
+					{
+						System.out.println(StudentID[i]+" "+StudentFname[i]+" "+StudentLname[i]+" "+StudentAge[i]+" "+
+							StudentGender[i]+" "+StudentYear[i]);
+					}
+				}
+			else
+			
+				if(Selection_Report==2)
+				{
+					System.out.println("\n"+"All Courses");
+					System.out.println("===========");
+					for(i=0;i<=ccount;++i)
+					{
+						System.out.println(CourseNumber[i]+" "+CourseName[i]+" "+ProfName[i]);
+					}
+				}
+				else
+			
+					if(Selection_Report==3)
+					{
+						System.out.println("\n"+"All Registration Information");
+						System.out.println("============================");
+						for(i=0;i<=rcount;++i)
+						{
+							System.out.println(RegStudentNumber[i]+" "+RegCourseNumber[i]);
+						}
+					}
+					else
+			
+			
+						if(Selection_Report==4)
+						{
+							String value;
+							int search_year;
+							System.out.println("\n"+"Students by Year");
+							System.out.println("================");
+							value =JOptionPane.showInputDialog(null,"Enter Year","Robert Morris University",JOptionPane.QUESTION_MESSAGE);
+							search_year =Integer.parseInt(value);
+							for(i=0;i<=scount;++i)
+							{
+								if(StudentYear[i]==search_year)
+								System.out.println(StudentID[i]+" "+StudentFname[i]+" "+StudentLname[i]+" "+StudentAge[i]+" "+
+										StudentGender[i]);
+							}
+						}	
+						else
+							
+							if(Selection_Report==5)
+							{
+								String search_prof;
+								System.out.println("\n"+"Courses by Professor");
+								System.out.println("====================");
+								search_prof =JOptionPane.showInputDialog(null,"Enter the Professor's Name","Robert Morris University",JOptionPane.QUESTION_MESSAGE);
+								for(i=0;i<=ccount;++i)
+								{
+									if(ProfName[i].equals(search_prof))
+									System.out.println(CourseNumber[i]+" "+CourseName[i]);
+								}
+							}	
+								else
+								
+								
+									if(Selection_Report==6)
+									{
+										String value;
+										int search_student;
+										System.out.println("\n"+"Classes by Student");
+										System.out.println("==================");
+										value =JOptionPane.showInputDialog(null,"Enter Student ID","Robert Morris University",JOptionPane.QUESTION_MESSAGE);
+										search_student =Integer.parseInt(value);
+										for(i=0;i<=rcount;++i)
+										{
+											if(RegStudentNumber[i]==search_student)
+											System.out.println(RegCourseNumber[i]);
+										}
+									}	
+									else
+								
+								
+										if(Selection_Report==7)
+										{
+											int ClassCount = 0;
+											String search_course;
+											System.out.println("\n"+"Students per Course");
+											System.out.println("===================");
+											search_course =JOptionPane.showInputDialog(null,"Enter Course Number","Robert Morris University",JOptionPane.QUESTION_MESSAGE);
+											for(i=0;i<=rcount;++i)
+											{
+												if(RegCourseNumber[i].equals(search_course))
+													ClassCount++;												
+											}
+											System.out.println(search_course+": "+ClassCount+" student(s)");
+											return ClassCount;
+											
+										}	
+										else
+								
+								
+											if(Selection_Report==8)
+											{
+												System.out.println("Report 8 to be completed");
+											}	
+											else	
+												
+												if(Selection_Report==9)
+												{
+													System.out.println("Report 9 to be completed");
+												}	
+												else	
+													
+													if(Selection_Report==10)
+													{
+														System.out.println("Report 10 to be completed");
+													}	
+			Selection_Report=Report_Menu();
+		}
+		return scount;
+	}
+	
+	public static Integer Report_Menu()
+	{
+		Integer Selection_Report = 0;
+		String Selection_Report_String;
+		
+		Selection_Report_String=JOptionPane.showInputDialog(null,"Robert Morris University"+"\n"+"\n"+
+		        "1. Student Master List"+"\n"+
+				"2. Course Master List"+"\n"+
+				"3. Registration Master List"+"\n"+
+				"4. Student list by Year"+"\n"+
+				"5. Professor Course List "+"\n"+
+				"6. Student Course List "+"\n"+
+				"7. Course enrollment count "+"\n"+
+				"8. Detailed Student Course List "+"\n"+
+				"9. Single Course Enrollment "+"\n"+
+				"10.Total Course Enrollment "+"\n"+
+				"11.Exit Report Menu"+"\n"+"\n"+
+				"Please Make your Selection", "Robert Morris University", JOptionPane.QUESTION_MESSAGE);
+		Selection_Report=Integer.parseInt(Selection_Report_String);
+		return Selection_Report;
+	}
+	
+	public static int Begin_read_student(int StudentID[],String StudentFname[],String StudentLname[],
+			int StudentAge[],String StudentGender[],int StudentYear[],int scount)
+	{
+	System.out.println("Executing read_student");
+	String newLine;
+			try
+			{
+			 BufferedReader student_file = new BufferedReader(new FileReader("student.txt"));
+			while ((newLine = student_file.readLine()) != null)
+				         {
+				           //there is a "#" between each data item in each line
+				            StringTokenizer delimiter = new StringTokenizer(newLine,"#");
+				            scount=scount+1;
+				            StudentID[scount] =Integer.parseInt(delimiter.nextToken());
+				            StudentFname[scount] =delimiter.nextToken();
+				            StudentLname[scount] =delimiter.nextToken();
+				            StudentAge[scount] = Integer.parseInt(delimiter.nextToken());
+				            StudentGender[scount] =delimiter.nextToken();
+				            StudentYear[scount] = Integer.parseInt(delimiter.nextToken());
+				         }
+				         student_file.close();
+				      }
+				  catch (IOException error)
+				    {
+				   System.out.println("Error on file read " + error);
+				    }
+		return scount;
+	}
+	//done
+	public static int Begin_read_course(String CourseNumber[],String CourseName[],String ProfName[],int ccount)
+	{
+		System.out.println("Executing read_course");
+		String newLine;
+		try
+		{
+		BufferedReader course_file = new BufferedReader(new FileReader("course.txt"));
+		while ((newLine = course_file.readLine()) != null)
+			         {
+			            StringTokenizer delimiter = new StringTokenizer(newLine,"#");
+			            ccount=ccount+1;
+			            CourseNumber[ccount] =delimiter.nextToken();
+			            CourseName[ccount] =delimiter.nextToken();
+			            ProfName[ccount] =delimiter.nextToken();
+			          }
+			         course_file.close();
+			      }
+			  catch (IOException error)
+			    {
+			    System.out.println("Error on file read " + error);
+			    }
+	return ccount;
+	}
+	//done
+	public static int Begin_read_register(int RegStudentNumber[],String RegCourseNumber[],int rcount)
+	{
+		System.out.println("Executing read_register");
+		String newLine;
+		try
+		{
+		BufferedReader register_file = new BufferedReader(new FileReader("register.txt"));
+		while ((newLine = register_file.readLine()) != null)
+			         {
+			            StringTokenizer delimiter = new StringTokenizer(newLine,"#");
+			            rcount=rcount+1;
+			            RegStudentNumber[rcount] =Integer.parseInt(delimiter.nextToken());
+			            RegCourseNumber[rcount] =delimiter.nextToken();
+			         }
+			         register_file.close();
+			      }
+			  catch (IOException error)
+			    {
+			    System.out.println("Error on file read " + error);
+			    }
+	return rcount;
+	}
+	//done
+	public static void Exit_RMU()
+	{
+		System.out.println("Executing Exit RMU");
+	  }
+}
